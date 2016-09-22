@@ -1,0 +1,29 @@
+{
+    "name": "MonitorLizard",
+    "version": "0.0.1",
+    "description": "Reports that segment page views by user ID.",
+    "theme": false,
+    "require": {
+        "piwik": ">=2.16.3-b3"
+    },
+    "authors": [
+        {
+            "name": "Piwik",
+            "email": "",
+            "homepage": ""
+        }
+    ],
+    "support": {
+        "email": "",
+        "issues": "",
+        "forum": "",
+        "irc": "",
+        "wiki": "",
+        "source": "",
+        "docs": "",
+        "rss": ""
+    },
+    "homepage": "",
+    "license": "GPL v3+",
+    "keywords": []
+}
