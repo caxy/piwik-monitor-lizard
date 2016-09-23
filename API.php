@@ -9,6 +9,7 @@
 
 namespace Piwik\Plugins\MonitorLizard;
 
+use Piwik\Archive;
 use Piwik\DataTable;
 
 /**
@@ -31,11 +32,9 @@ class API extends \Piwik\Plugin\API
      *
      * @return DataTable
      */
-    public function getActionsByUser($idSite, $period, $date, $segment = false, $expanded = false, $idSubtable = false, $flat = false)
+    public function getActionsByUser($idSite, $period, $date, $segment = false, $expanded = false, $idSubtable = false, $depth = false, $flat = false)
     {
-        $instance = \Piwik\Plugins\Actions\API::getInstance();
-
-        $dataTable = $instance->getPageTitles($idSite, $period, $date, $segment, $expanded, $idSubtable, true);
+        $dataTable = Archive::createDataTableFromArchive('Actions_actions_url', $idSite, $period, $date, $segment, $expanded, $flat, $idSubtable, $depth);
 
         return $dataTable;
     }
