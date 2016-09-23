@@ -1,5 +1,5 @@
 {
-    "name": "caxy/monitor-lizard",
+    "name": "caxy/piwik-monitor-lizard",
     "type": "piwik-plugin",
     "description": "Reports that segment page views by user ID.",
     "require": {
