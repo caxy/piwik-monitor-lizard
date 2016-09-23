@@ -3,7 +3,6 @@
     "type": "piwik-plugin",
     "description": "Reports that segment page views by user ID.",
     "require": {
-        "piwik/piwik": "^2.16.2",
         "composer/installers": "^1.2"
     },
     "authors": [
