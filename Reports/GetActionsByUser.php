@@ -9,12 +9,14 @@
 
 namespace Piwik\Plugins\MonitorLizard\Reports;
 
+use Piwik\Columns\Dimension;
 use Piwik\Piwik;
 use Piwik\Plugin\Report;
 use Piwik\Plugin\ViewDataTable;
-use Piwik\Plugins\Actions\Columns\PageTitle;
+use Piwik\Plugins\Actions\Columns\PageUrl;
 use Piwik\Plugins\CustomDimensions\Dimension\CustomActionDimension;
 use Piwik\Plugins\UserId\Columns\UserId;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * This class defines a new report.
@@ -27,14 +29,14 @@ class GetActionsByUser extends Report
     {
         $this->category = 'General_Actions';
         $this->name = Piwik::translate('MonitorLizard_ActionsByUser');
-        $this->dimension = new CustomActionDimension(2, 'User name');
         $this->documentation = Piwik::translate('');
+
 
         // This defines in which order your report appears in the mobile app, in the menu and in the list of widgets
         $this->order = 200;
 
         // Uncomment the next line if your report should be able to load subtables. You can define any action here
-        $this->actionToLoadSubTables = 'getActionsForUser';
+        $this->actionToLoadSubTables = 'getUsers';
 
         // Uncomment the next line if your report always returns a constant count of rows, for instance always
         // 24 rows for 1-24hours
@@ -46,6 +48,6 @@ class GetActionsByUser extends Report
 
     public function configureView(ViewDataTable $view)
     {
-        $view->config->show_flatten_table = FALSE;
+//        $view->config->show_flatten_table = FALSE;
     }
 }
