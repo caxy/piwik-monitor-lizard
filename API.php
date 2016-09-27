@@ -11,6 +11,8 @@ namespace Piwik\Plugins\MonitorLizard;
 
 use Piwik\Archive;
 use Piwik\DataTable;
+use Piwik\Piwik;
+use Piwik\Plugins\CustomDimensions\Dimension\Dimension;
 
 /**
  * API for plugin MonitorLizard.
@@ -34,47 +36,31 @@ class API extends \Piwik\Plugin\API
      */
     public function getActionsByUser($idSite, $period, $date, $segment = false, $expanded = false, $idSubtable = false, $depth = false, $flat = false)
     {
-        /** @var DataTable $report */
-        $report = \Piwik\API\Request::processRequest('Actions.getPageUrls', array(
-          'idSite' => $idSite,
-          'period' => $period,
-          'date'   => $date,
-        ));
+        $idDimension = 1;
+        Piwik::checkUserHasViewAccess($idSite);
 
-        $report->filter(function (DataTable $dataTable) use ($idSite, $period, $date, $segment, $expanded, $idSubtable, $depth, $flat) {
-            /** @var DataTable\Row $row */
-            foreach ($dataTable->getRows() as $row) {
-                $row->setSubtable($this->getUsers($idSite, $period, $date, $row->getMetadata('segment')));
-            }
-        });
+        $dimension = new Dimension($idDimension, $idSite);
+        $dimension->checkActive();
 
+        $record = 'MonitorLizard_pagesByUser';
 
-//        $report->filter('AddSegmentByLabel', array('PageUrl'));
-//        $report->filter('AddSegmentByLabel', array('PageUrl'));
+        $dataTable = Archive::createDataTableFromArchive($record, $idSite, $period, $date, $segment, $expanded, $flat, $idSubtable);
 
-        return $report;
-    }
+//      if (isset($idSubtable) && $dataTable->getRowsCount()) {
+//        $parentTable = Archive::createDataTableFromArchive($record, $idSite, $period, $date, $segment);
+//        foreach ($parentTable->getRows() as $row) {
+//          if ($row->getIdSubDataTable() == $idSubtable) {
+//            $parentValue = $row->getColumn('label');
+//            $dataTable->queueFilter('Piwik\Plugins\CustomDimensions\DataTable\Filter\AddSubtableSegmentMetadata', array($idDimension, $parentValue));
+//            break;
+//          }
+//        }
+//      } else {
+//        $dataTable->queueFilter('Piwik\Plugins\CustomDimensions\DataTable\Filter\AddSegmentMetadata', array($idDimension));
+//      }
 
-    /**
-     * @param $idSite
-     * @param $period
-     * @param $date
-     * @param bool $segment
-     *
-     * @return DataTable
-     */
-    public function getUsers($idSite, $period, $date, $segment = false, $idSubtable = false)
-    {
-        dump(func_get_args());
-        $report = \Piwik\API\Request::processRequest('CustomDimensions.getCustomDimension', array(
-          'idSite' => $idSite,
-          'period' => $period,
-          'date'   => $date,
-          'segment' => $segment,
-          'idSubtable' => $idSubtable,
-          'idDimension' => 2,
-        ));
+//      $dataTable->filter('Piwik\Plugins\CustomDimensions\DataTable\Filter\RemoveUserIfNeeded', array($idSite, $period, $date));
 
-        return $report;
+      return $dataTable;
     }
 }
